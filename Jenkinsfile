@@ -1,5 +1,5 @@
 pipeline {
-    agent { label 'java' }
+    agent any
 stages { 
 stage('checkout') {
             steps {
@@ -18,7 +18,7 @@ stage('checkout') {
 
         stage('deploy') {
             steps {
-                sh "sudo cp hello-world-war/target/hello-world-war-1.0.0.war /opt/apache-tomcat-10.1.49/webapps/hello-world.war"
+                sh "sudo cp /var/lib/jenkins/workspace/hello-world-war/target/hello-world-war-1.0.0.war /opt/apache-tomcat-10.1.49/webapps/hello-world.war"
             }
         }
     }
