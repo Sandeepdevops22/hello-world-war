@@ -1,12 +1,14 @@
 pipeline {
-   // agent { label 'java' }
     agent none
-    stages { 
-        stage('checkout') {
-            agent { label 'java' }
-           steps {
-               sh "rm -rf hello-world-war"
-               sh "git clone https://github.com/Sandeepdevops22/hello-world-war"
+stages {
+        stage('Parallel Stages') {
+            parallel {
+
+                stage('Checkout') {
+                    agent { label 'java' }
+                    steps {
+                        sh "rm -rf hello-world-war"
+                        sh "git clone https://github.com/Sandeepdevops22/hello-world-war"
             }
         }
         stage('build') {
