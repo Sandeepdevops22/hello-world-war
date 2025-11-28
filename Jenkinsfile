@@ -1,8 +1,8 @@
 pipeline {
+ //    agent { label 'java' }
     agent none
-
-    stages {
-        stage('Parallel Stages') {
+ stages {
+        stage('Hello world war') {
             parallel {
 
                 stage('Checkout') {
