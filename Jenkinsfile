@@ -1,6 +1,5 @@
 pipeline {
     agent { label 'java' }
-    agent none
     stages { 
         stage('checkout') {
             steps {
