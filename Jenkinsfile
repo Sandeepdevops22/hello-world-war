@@ -1,5 +1,5 @@
 pipeline {
-    // agent { label 'Java' }
+    // agent { label 'java' }
     agent none
     parameters {
         string(name: 'mcmd1', defaultValue: 'clean', description: 'maven clean command')
@@ -10,7 +10,7 @@ pipeline {
         stage ('hello-world-war') {
             parallel {
                 stage('Checkout') {
-                    agent { label 'Java' }
+                    agent { label 'java' }
                     steps {
                         withCredentials([
                             usernamePassword(credentialsId: 'e8ff0ebb-76da-4871-aa96-6431d2a85ede',
@@ -27,7 +27,7 @@ pipeline {
                 }
 
                 stage('Build') {
-                    agent { label 'Java' }
+                    agent { label 'java' }
                     steps {
                         sh "mvn $mcmd1 $mcmd2"
                     }
@@ -36,7 +36,7 @@ pipeline {
         }
 
         stage('Deploy') {
-            agent { label 'Java' }
+            agent { label 'java' }
             steps {
                 sh "sudo cp /home/slave1/workspace/job_hello_word_jenkin/target/hello-world-war-1.0.0.war /opt/apache-tomcat-10.1.49/webapps"
             }
