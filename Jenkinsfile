@@ -13,10 +13,10 @@ pipeline {
                     agent { label 'Java' }
                     steps {
                         withCredentials([
-                            usernamePassword(credentialsId: 'e919faa3-a431-4023-91af-d4c7df158e19',
+                            usernamePassword(credentialsId: 'e8ff0ebb-76da-4871-aa96-6431d2a85ede',
                                 usernameVariable: 'MY_USERNAME',
                                 passwordVariable: 'MY_PASSWORD'),
-                            sshUserPrivateKey(credentialsId: 'bb6fc174-b510-405e-810f-79b569cd0a83',
+                            sshUserPrivateKey(credentialsId: 'a8c29363-fdb7-4bb3-987a-71b42347549b',
                                 keyFileVariable: 'KEY_FILE',
                                 usernameVariable: 'SSH_USER')
                         ]) {
