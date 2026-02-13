@@ -1,45 +1,50 @@
 pipeline {
-    // agent { label 'java' }
-    agent none
-    parameters {
-        string(name: 'mcmd1', defaultValue: 'clean', description: 'maven clean command')
-        booleanParam(name: 'SAMPLE_BOOLEAN', defaultValue: true, description: 'A boolean parameter')
-        choice(name: 'mcmd2', choices: ['package', 'compile', 'install', 'validate'], description: 'Choose one option')
-    }
-    stages {
-        stage ('hello-world-war') {
-            parallel {
-                stage('Checkout') {
-                    agent { label 'java' }
-                    steps {
-                        withCredentials([
-                            usernamePassword(credentialsId: 'e8ff0ebb-76da-4871-aa96-6431d2a85ede',
-                                usernameVariable: 'MY_USERNAME',
-                                passwordVariable: 'MY_PASSWORD'),
-                            sshUserPrivateKey(credentialsId: 'a8c29363-fdb7-4bb3-987a-71b42347549b',
-                                keyFileVariable: 'KEY_FILE',
-                                usernameVariable: 'SSH_USER')
-                        ]) {
-                            sh "rm -rf hello-world-war"
-                            sh "git clone https://github.com/Sandeepdevops22/hello-world-war"
-                        }
-                    }
-                }
+    agent any
 
-                stage('Build') {
-                    agent { label 'java' }
-                    steps {
-                        sh "mvn $mcmd1 $mcmd2"
-                    }
-                }
+    environment {
+        IMAGE_NAME = "sandeep2210/hello-world-war-image"
+        IMAGE_TAG = "latest"
+        DOCKER_CREDS = credentials('dockerhub-creds')
+    }
+
+    stages {
+
+        stage('Checkout Code') {
+            steps {
+                git branch: 'main',
+                    url: 'https://github.com/Sandeepdevops22/hello-world-war.git'
             }
         }
 
-        stage('Deploy') {
-            agent { label 'java' }
+        stage('Build Docker Image') {
             steps {
-                sh "sudo cp /home/slave1/workspace/Helloworldwarpipeline/target/hello-world-war-1.0.0.war /opt/apache-tomcat-10.1.49-src/webapps"
+                sh "docker build -t ${IMAGE_NAME}:${IMAGE_TAG} ."
+            }
+        }
+
+        stage('DockerHub Login') {
+            steps {
+                sh """
+                echo ${DOCKER_CREDS_PSW} | docker login -u ${DOCKER_CREDS_USR} --password-stdin
+                """
+            }
+        }
+
+        stage('Push Image') {
+            steps {
+                sh "docker push ${IMAGE_NAME}:${IMAGE_TAG}"
+            }
+        }
+
+        stage('Deploy to Tomcat Container') {
+            steps {
+                sh """
+                docker stop hello-app || true
+                docker rm hello-app || true
+                docker run -d -p 8080:8080 --name hello-app ${IMAGE_NAME}:${IMAGE_TAG}
+                """
             }
         }
     }
 }
+
