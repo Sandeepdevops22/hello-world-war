@@ -1,5 +1,5 @@
 pipeline {
-   agent any
+   agent { label slave 1}
 
     environment {
         IMAGE_NAME = "sandeep2210/hello-world-war-image"
