@@ -45,7 +45,7 @@ pipeline {
                 sh """
                 docker stop hello-app || true
                 docker rm hello-app || true
-                docker run -d -p 8080:8080 --name hello-app ${IMAGE_NAME}:${IMAGE_TAG}
+                docker run -d -p 5050:8080 --name hello-app ${IMAGE_NAME}:${IMAGE_TAG}
                 """
             }
         }
