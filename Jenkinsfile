@@ -9,6 +9,7 @@ pipeline {
         IMAGE_NAME = "sandeep2210/hello-world-war-image"
         IMAGE_TAG = "${BUILD_NUMBER}"
         DOCKER_CREDS = credentials('dockerhub-creds')
+         HOME = "${WORKSPACE}"
     }
     stages {
 
