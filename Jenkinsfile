@@ -5,7 +5,11 @@ pipeline {
             args '-v /var/run/docker.sock:/var/run/docker.sock -v /usr/bin/docker:/usr/bin/docker'
         }
     }
-
+ environment {
+        IMAGE_NAME = "sandeep2210/hello-world-war-image"
+        IMAGE_TAG = "${BUILD_NUMBER}"
+        DOCKER_CREDS = credentials('dockerhub-creds')
+    }
     stages {
 
         stage('Checkout Code') {
