@@ -1,10 +1,9 @@
 pipeline {
-   agent {label slave 1}
-
-    environment {
-        IMAGE_NAME = "sandeep2210/hello-world-war-image"
-        IMAGE_TAG = "${BUILD_NUMBER}"
-        DOCKER_CREDS = credentials('dockerhub-creds')
+    agent {
+        docker {
+            image 'docker:latest'
+            args '-v /var/run/docker.sock:/var/run/docker.sock -v /usr/bin/docker:/usr/bin/docker'
+        }
     }
 
     stages {
